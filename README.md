@@ -6,6 +6,12 @@ OrderProof brings company-grounded support, human handoff, and verifiable conver
 
 [Live application](https://tapuxp0ed4.execute-api.us-east-1.amazonaws.com) · [Integration demo](https://tapuxp0ed4.execute-api.us-east-1.amazonaws.com/integration-demo) · [Submission checklist](docs/submission.md) · [Release audit](docs/final-audit.md)
 
+![AWS Bedrock](https://img.shields.io/badge/AWS-Bedrock-8C4FFF?style=flat-square)
+![AWS Lambda](https://img.shields.io/badge/AWS-Lambda-FF9900?style=flat-square)
+![Amazon DynamoDB](https://img.shields.io/badge/Amazon-DynamoDB-4053D6?style=flat-square)
+![Amazon S3](https://img.shields.io/badge/Amazon-S3-569A31?style=flat-square)
+![Python 3.13](https://img.shields.io/badge/Python-3.13-3776AB?style=flat-square)
+
 ## Architecture
 
 ![OrderProof AWS architecture](docs/assets/architecture.png)
