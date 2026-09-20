@@ -57,3 +57,13 @@ No production certification, guaranteed inbox placement, or completed real AI ev
 ## Latest AI recheck
 
 The fresh live workflow on September 20 again returned the explicit unavailable fallback. A separate Nova Lite Converse request in `us-west-2`, with `maxTokens=128`, returned `ThrottlingException: Too many tokens per day, please wait before trying again.` Live generated answers remain blocked. Explicitly limiting output tokens reduces quota reservation but does not resolve an exhausted or zero daily allowance. Handoff, record verification, and export passed again.
+
+## Submission-readiness follow-up
+
+- Category selected: Commercial Potential; lane selected: Startup. Builder Center publication and tags still pending.
+- Official Rules reviewed in Chromium: Sri Lanka is not excluded, and self-reported age 19 meets the minimum. Employment/household and originality confirmations remain outstanding.
+- Backend suite expanded to 49 passing tests, including prevention of self-issued reviewer grants and expiry enforcement.
+- Public reviewer guide and bounded administrator-issued reviewer access implemented. An actual reviewer workspace grant still needs provisioning.
+- A five-case live model evaluation is prepared; it stops on the first quota failure and records zero completed cases, not a false pass.
+- AWS accepted a Nova Lite cross-region TPM request; status PENDING. See evidence/quota-request.json. Approval and a successful model invocation remain required.
+- The GitHub browser hang was isolated to accessibility traversal of sandboxed email iframes. Gallery checks now skip iframe traversal; each template is independently tested as a full document. Hosted CI must complete to validate the fix.

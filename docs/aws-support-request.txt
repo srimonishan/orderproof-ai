@@ -22,3 +22,5 @@ Region: us-west-2
 Timestamp: 2026-09-20T06:01:09.568879+00:00
 Request ID: d7601a94-2636-4151-8aea-a7a560bf0e30
 Error: ThrottlingException: Too many tokens per day, please wait before trying again.
+
+Update: quota request 2e82f2db197b4488873af1601d68754avdyN5ysA accepted with PENDING status on September 20, 2026 for L-7C42E72A at 8,000,001 TPM (smallest integer above required AWS default). No reserved capacity purchased; app limits unchanged. Account-plan API reports ACTIVE PAID, so upgrading the account plan is not the missing step. Await AWS decision; no successful inference claimed.

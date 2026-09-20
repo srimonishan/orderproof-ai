@@ -1,0 +1,13 @@
+{
+  "id": "2e82f2db197b4488873af1601d68754avdyN5ysA",
+  "service": "bedrock",
+  "region": "us-west-2",
+  "quotaCode": "L-7C42E72A",
+  "model": "Amazon Nova Lite cross-region inference",
+  "desiredValue": 8000001,
+  "status": "PENDING",
+  "created": "2026-09-20T19:56:21.951000+05:30",
+  "reason": "Applied daily quota is zero. AWS requires TPM increase above the 8000000 default; approved TPM increases are exempt from the documented daily restriction.",
+  "costControl": "No reserved capacity purchased. Application monthly limits unchanged.",
+  "next": "Await AWS decision, verify applied quota, test inference profile and deployed chat before declaring success."
+}
