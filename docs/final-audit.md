@@ -28,7 +28,7 @@ The recorded Python suite contains 47 passing tests. Coverage includes tenant is
 
 Browser checks cover the fictional demo workspace, owner inbox, knowledge, settings, plans, records, installation, customer handoff, embed, mobile layout, mocked authentication, and email previews. Fictional demo responses are not Bedrock outputs.
 
-The latest recorded live integration run completed at **2026-09-20T06:35:21Z**. See [machine-readable results](evidence/live-support-smoke.json). Synthetic records remain subject to retention; temporary login identities were removed.
+The latest recorded live integration run completed at **2026-09-20T09:47:55Z**. See [machine-readable results](evidence/live-support-smoke.json). Synthetic records remain subject to retention; temporary login identities were removed.
 
 ## Required before production
 
@@ -53,3 +53,7 @@ The final local rerun passed all 47 Python tests, cfn-lint, four Guard rules, Ja
 - [Cost assumptions](evidence/cost-estimate.json)
 
 No production certification, guaranteed inbox placement, or completed real AI evaluation is claimed. Repository preparation does not publish a GitHub repository.
+
+## Latest AI recheck
+
+The fresh live workflow on September 20 again returned the explicit unavailable fallback. A separate Nova Lite Converse request in `us-west-2`, with `maxTokens=128`, returned `ThrottlingException: Too many tokens per day, please wait before trying again.` Live generated answers remain blocked. Explicitly limiting output tokens reduces quota reservation but does not resolve an exhausted or zero daily allowance. Handoff, record verification, and export passed again.

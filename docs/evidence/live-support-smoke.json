@@ -1,5 +1,5 @@
 {
-  "testedAt": "2026-09-20T06:35:21Z",
+  "testedAt": "2026-09-20T09:47:55Z",
   "url": "https://tapuxp0ed4.execute-api.us-east-1.amazonaws.com",
   "checks": [
     "anonymous business access denied",
@@ -15,6 +15,6 @@
     "plan preference cannot activate paid access"
   ],
   "bedrock": "unavailable-fallback",
-  "syntheticConversationId": "b17b1434e36c101166451bcc",
+  "syntheticConversationId": "046a586355479de8e6438aa7",
   "note": "Synthetic test records retained according to the archive lifecycle. Temporary test login accounts removed."
 }
