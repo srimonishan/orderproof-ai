@@ -139,3 +139,25 @@ def test_message_limit_reserves_closing_event():
     with pytest.raises(app.Problem):s.append(current,'customer','Too late','late')
     final=s.append(current,'system','Closed','close',{'status':'closed'})
     assert final['seq']==250 and final['status']=='closed'
+
+
+def test_reviewer_grant_cannot_be_self_issued_or_extended():
+    b=biz()
+    assert not b['reviewAccessUntil']
+    changed=s.save_business('alice',{**b,'reviewAccessUntil':int(time.time())+9000000})
+    assert changed['reviewAccessUntil']==0
+    grant=int(time.time())+3600
+    s.store().update_item(Key=s.key('BIZ#alice','PROFILE'),UpdateExpression='SET reviewAccessUntil = :t, trialEnds = :e',ExpressionAttributeValues={':t':grant,':e':1})
+    b=s.business('alice');s.ensure_active(b)
+    changed=s.save_business('alice',{**s.clean(b),'version':int(b['version']),'reviewAccessUntil':grant+9000000})
+    assert changed['reviewAccessUntil']==grant
+    assert s.entitlements(changed)['ai']==100
+
+
+def test_expired_reviewer_grant_does_not_bypass_trial():
+    b=biz()
+    b.update(trialEnds=1,reviewAccessUntil=2)
+    with pytest.raises(app.Problem) as error:s.ensure_active(b)
+    assert error.value.status==402
+    b['trialEnds']=int(time.time())+3600
+    s.ensure_active(b)

@@ -334,7 +334,7 @@ def handle(event):
                 return response({'deleted': True})
         raise Problem(404, 'Not found.')
     if method == 'GET':
-        files = {'/': 'support.html', '/app.js': 'app.js', '/style.css': 'style.css', '/favicon.svg': 'favicon.svg', '/support.js': 'support.js', '/support.css': 'support.css', '/embed.js': 'embed.js', '/embed.css': 'embed.css', '/widget.js': 'widget.js', '/widget.css': 'widget.css', '/widget-demo': 'widget.html', '/integration-demo': 'integration-demo.html', '/orders': 'index.html', '/email-preview': 'email-preview.html', '/email-preview.js': 'email-preview.js', **{'/email-'+k+'.html': 'email-'+k+'.html' for k in ('verification', 'welcome', 'handoff', 'closed')}}
+        files = {'/review': 'review.html', '/': 'support.html', '/app.js': 'app.js', '/style.css': 'style.css', '/favicon.svg': 'favicon.svg', '/support.js': 'support.js', '/support.css': 'support.css', '/embed.js': 'embed.js', '/embed.css': 'embed.css', '/widget.js': 'widget.js', '/widget.css': 'widget.css', '/widget-demo': 'widget.html', '/integration-demo': 'integration-demo.html', '/orders': 'index.html', '/email-preview': 'email-preview.html', '/email-preview.js': 'email-preview.js', **{'/email-'+k+'.html': 'email-'+k+'.html' for k in ('verification', 'welcome', 'handoff', 'closed')}}
         filename = files.get(path)
         if path in ('/app', '/privacy', '/integrations', '/pricing', '/docs'):
             filename = 'support.html'

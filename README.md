@@ -46,14 +46,16 @@ The core report is an exportable conversation transcript: customer messages, ass
 
 ## Zero to Shipped hackathon
 
-**Proposed category:** Commercial Potential. **Proposed focus track:** Startup.
+**Selected category:** Commercial Potential. **Selected lane:** Startup.
 
-| Judging theme from the supplied FAQ | What OrderProof demonstrates |
+[Reviewer guide](https://tapuxp0ed4.execute-api.us-east-1.amazonaws.com/review) · [Builder Center project draft](docs/builder-center-project.md)
+
+| Official judging criterion (25% each) | What OrderProof demonstrates |
 | --- | --- |
-| Creativity and storytelling | A customer support journey that continues from the first question to a record both sides can retain. |
-| Technical innovation and originality | Approved-source retrieval, source references, human handoff, and transactionally appended conversation events in one workflow. |
-| Community and market impact | A practical tool for small-business support; measured customer outcomes remain to be validated. |
-| Implementation quality | AWS deployment, tenant isolation, server-enforced limits, protected archives, automated tests, and explicit failure handling. |
+| Creativity & Storytelling | A customer support journey that continues from the first question to a record both sides can retain. |
+| Technical Innovation & Originality | Approved-source retrieval, source references, human handoff, and transactionally appended conversation events in one workflow. |
+| Community/Market Impact | A practical tool for small-business support; measured customer outcomes remain to be validated. |
+| Implementation Quality | AWS deployment, tenant isolation, server-enforced limits, protected archives, automated tests, and explicit failure handling. |
 
 The coding agent contributed to product implementation, UI, AWS infrastructure, testing, deployment, and troubleshooting. [Connection evidence](docs/evidence/aws-connection.md) and the [submission tracker](docs/submission.md) document the work. A live deployment and repository do not constitute a completed hackathon entry: eligibility, accepted connection evidence, the Builder Center project, and final submission still need confirmation.
 
@@ -94,7 +96,7 @@ npm run test:browser
 
 Browser tests use `/usr/bin/chromium` when present, otherwise the bundled Playwright browser. Set `PLAYWRIGHT_CHROMIUM_EXECUTABLE` to override it. `ORDERPROOF_URL` selects an alternative deployment for browser checks.
 
-The recorded audit includes **47 passing Python tests**, browser journeys and automated accessibility checks, infrastructure validation, and a synthetic live AWS workflow. Authentication browser tests mock Cognito responses; they do not prove mailbox delivery. Automated accessibility checks do not constitute a full accessibility certification.
+The recorded audit includes **49 passing Python tests**, browser journeys and automated accessibility checks, infrastructure validation, and a synthetic live AWS workflow. Authentication browser tests mock Cognito responses; they do not prove mailbox delivery. Automated accessibility checks do not constitute a full accessibility certification.
 
 [`scripts/smoke_support.py`](scripts/smoke_support.py) performs authenticated AWS integration checks, creates temporary test identities and synthetic records, and removes the identities afterward. Retained synthetic archives follow the configured lifecycle. Run it only against an AWS environment you are authorized to test.
 

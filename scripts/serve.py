@@ -20,6 +20,8 @@ class Handler(SimpleHTTPRequestHandler):
         path = self.path.split('?')[0]
         if path in ('/', '/privacy', '/app', '/integrations', '/pricing', '/docs'):
             self.path = '/support.html'
+        elif path == '/review':
+            self.path = '/review.html'
         elif path == '/email-preview':
             self.path = '/email-preview.html'
         elif path == '/widget-demo':

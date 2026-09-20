@@ -97,7 +97,7 @@ def entitlements(b):
 
 
 def ensure_active(b):
-    if b.get('plan', 'trial') == 'trial' and b.get('trialEnds', 0) <= time.time():
+    if b.get('plan', 'trial') == 'trial' and max(b.get('trialEnds', 0), b.get('reviewAccessUntil', 0)) <= time.time():
         raise a.Problem(402, 'The 7-day trial has ended. Your saved records are still available. Billing is not connected yet; no payment has been taken.')
 
 
@@ -136,6 +136,9 @@ def save_business(owner, data):
         'description': a.text(data.get('description', ''), 500), 'emailNotifications': notifications, 'plan': old.get('plan', 'trial') if old else 'trial',
         'trialEnds': old.get('trialEnds', 0) if old else int(time.time()) + 7 * 86400,
         'requestedPlan': old.get('requestedPlan', '') if old else '',
+        # Only an AWS administrator may issue this grant; never accept it from request data.
+        'reviewAccessUntil': old.get('reviewAccessUntil', 0) if old else 0,
+        'reviewGrantedAt': old.get('reviewGrantedAt', '') if old else '',
         'version': int(old['version']) + 1 if old else 1, 'updatedAt': a.now(),
         'createdAt': old['createdAt'] if old else a.now()}
     condition = Attr('version').eq(a.integer(data.get('version'))) if old else Attr('pk').not_exists()
