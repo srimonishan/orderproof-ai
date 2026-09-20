@@ -63,7 +63,7 @@ The fresh live workflow on September 20 again returned the explicit unavailable 
 - Category selected: Commercial Potential; lane selected: Startup. Builder Center publication and tags still pending.
 - Official Rules reviewed in Chromium: Sri Lanka is not excluded, and self-reported age 19 meets the minimum. Employment/household and originality confirmations remain outstanding.
 - Backend suite expanded to 49 passing tests, including prevention of self-issued reviewer grants and expiry enforcement.
-- Public reviewer guide and bounded administrator-issued reviewer access implemented. An actual reviewer workspace grant still needs provisioning.
+- Public reviewer guide and bounded administrator-issued reviewer access implemented. A dedicated synthetic workspace is provisioned with two approved policies and a verified grant through November 1; judge access instructions must still be delivered appropriately.
 - A five-case live model evaluation is prepared; it stops on the first quota failure and records zero completed cases, not a false pass.
 - AWS accepted a Nova Lite cross-region TPM request; status PENDING. See evidence/quota-request.json. Approval and a successful model invocation remain required.
-- The GitHub browser hang was isolated to accessibility traversal of sandboxed email iframes. Gallery checks now skip iframe traversal; each template is independently tested as a full document. Hosted CI must complete to validate the fix.
+- The GitHub browser hang was isolated to accessibility traversal of sandboxed email iframes. Gallery checks now skip iframe traversal; each template is independently tested as a full document. GitHub-hosted CI completed successfully: https://github.com/srimonishan/orderproof-ai/actions/runs/35516627127.

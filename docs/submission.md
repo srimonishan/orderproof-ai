@@ -61,7 +61,8 @@ Never claim a guaranteed top-three finish or prize. The supplied FAQ describes f
 
 - [x] Three-image README and architecture; main technology badges.
 - [x] Public reviewer guide and administrator-controlled expiring reviewer access implemented.
-- [ ] Grant access to the actual dedicated reviewer workspace and test it before submission.
+- [x] Create a dedicated synthetic reviewer workspace, seed two approved policies, and verify its November 1 access grant through the authenticated API.
+- [ ] Arrange judge access through an appropriate private channel and verify the final instructions.
 - [ ] Restore Bedrock token allowance; fixed-passage evaluation currently blocked before any successful answers.
 - [ ] Obtain participant-owned email domain if branded sender delivery is required; no domain is currently owned. Cognito default email remains the signup channel.
 - [x] Check Sri Lanka against official country exclusions (not excluded).

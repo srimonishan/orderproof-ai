@@ -15,7 +15,7 @@ python scripts/grant_review_access.py \
 
 This uses the administrator's local AWS credentials. There is no public grant endpoint. The script requires an existing profile and a deadline within 60 days. Normal profile updates cannot create or extend the grant, and optimistic version checking protects concurrent edits. The dashboard displays the reviewer deadline. The grant preserves trial AI/source/domain limits, global monthly limits, and request throttles; it does not enable billing.
 
-A grant is not yet issued merely because this feature is deployed. Confirm the actual reviewer identity, grant deadline, available AI budget, and access instructions before submission. To revoke a grant, an administrator sets `reviewAccessUntil` to zero; the ordinary trial expiration still applies.
+A dedicated synthetic reviewer workspace has now been created, with two approved policies and a verified grant through November 1. Its credentials are stored privately on the operator machine, not in this repository. Creating the workspace does not deliver credentials to judges. Confirm the actual reviewer identity, grant deadline, available AI budget, and access instructions before submission. To revoke a grant, an administrator sets `reviewAccessUntil` to zero; the ordinary trial expiration still applies.
 
 Run `scripts/smoke_support.py` to verify the real workflow and `scripts/evaluate_support.py` for a small fixed-passage grounding evaluation. The latter writes pass/fail/blocked evidence and stops on a service error. Its keyword checks complement manual review; they are not an accuracy certification.
 

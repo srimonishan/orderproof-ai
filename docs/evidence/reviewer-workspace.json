@@ -1,0 +1,13 @@
+{
+  "created": true,
+  "syntheticOnly": true,
+  "sourceCount": 2,
+  "reviewAccessUntil": "2026-11-01T00:00:00Z",
+  "grantVerifiedViaAuthenticatedApi": true,
+  "usageLimitsUnchanged": true,
+  "credentialsPublished": false,
+  "note": "Owner sign-in credentials stored privately on the operator machine. No invitation email sent. Live AI remains quota-blocked.",
+  "liveBrowserSignIn": "passed",
+  "liveAccessBanner": "passed",
+  "approvedKnowledgeVisible": "passed"
+}

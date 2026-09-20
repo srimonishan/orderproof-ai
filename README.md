@@ -100,7 +100,7 @@ The recorded audit includes **49 passing Python tests**, browser journeys and au
 
 [`scripts/smoke_support.py`](scripts/smoke_support.py) performs authenticated AWS integration checks, creates temporary test identities and synthetic records, and removes the identities afterward. Retained synthetic archives follow the configured lifecycle. Run it only against an AWS environment you are authorized to test.
 
-The [GitHub Actions workflow](.github/workflows/ci.yml) runs local checks without AWS credentials or deployment permissions. Check the repository’s Actions tab for the current hosted run status.
+The [GitHub Actions workflow](.github/workflows/ci.yml) runs local checks without AWS credentials or deployment permissions. The [reviewer-release checks passed on GitHub](https://github.com/srimonishan/orderproof-ai/actions/runs/35516627127). Check the Actions tab for subsequent run status.
 
 ## Deploy on AWS
 

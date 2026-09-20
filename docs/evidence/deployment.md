@@ -20,3 +20,7 @@ Screenshots under `screenshots/` show the public AWS application with clearly la
 The deployment is reachable. Bedrock generation remains dependent on the account's quota being restored; no artificial/demo reply is represented as a live model result. Stripe is deferred by the owner's instruction. No Builder Center entry has been submitted.
 
 Final audit update: deployment includes branded email previews, disabled-until-configured SES support, verified-owner notification safeguards, verification UX improvements, and model availability reporting. See `email-audit.json` and `../final-audit.md` for actual readiness and blockers.
+
+## Reviewer release — September 20, 2026
+
+CloudFormation update completed for the existing stack. Added `/review`, bounded administrator-granted workspace access, transparent access status in the UI, and a five-case Bedrock evaluation script. 49 Python tests passed. Live deployed browser checks and synthetic handoff/archive/export workflow passed. Dedicated synthetic reviewer sign-in, grant, and approved sources were verified. Bedrock generation still returned its quota fallback; the accepted quota request remains a separate AWS decision.
