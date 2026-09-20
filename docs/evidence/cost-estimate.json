@@ -1,0 +1,37 @@
+{
+  "assumptions": {
+    "ai_calls": 500,
+    "input_tokens_per_call": 9000,
+    "output_tokens_per_call": 1800,
+    "http_requests": 100000,
+    "lambda_non_ai_requests": 99500,
+    "lambda_non_ai_seconds": 0.15,
+    "lambda_ai_seconds": 29,
+    "memory_gb": 0.25,
+    "database_write_units": 1000000,
+    "database_read_units": 2000000,
+    "database_gb": 0.5,
+    "logs_gb": 0.2,
+    "data_transfer_gb": 3,
+    "active_sellers": 50
+  },
+  "estimated_usd": {
+    "bedrock": 0.486,
+    "http_api": 0.1,
+    "lambda_requests": 0.02,
+    "lambda_compute": 0.0981,
+    "dynamodb_writes": 0.625,
+    "dynamodb_reads": 0.25,
+    "dynamodb_storage": 0.125,
+    "logs": 0.106,
+    "data_transfer_allowance": 0.27,
+    "cognito_allowance": 0.275,
+    "artifact_storage_allowance": 0.05,
+    "s3_archive_storage_and_requests_allowance": 0.1,
+    "transactional_email_allowance": 0.05
+  },
+  "total_usd": 2.56,
+  "planning_allowance_usd": 5,
+  "budget_usd": 10,
+  "note": "Estimates are not a hard spending cap. Includes conservative paid allowances rather than assuming free-tier eligibility. Model global monthly limit is enforced server-side; public traffic, AWS pricing, tax, and unrelated account spend can vary."
+}

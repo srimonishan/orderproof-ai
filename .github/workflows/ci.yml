@@ -1,0 +1,69 @@
+name: Quality checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: quality-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: '3.13'
+          cache: pip
+          cache-dependency-path: |
+            requirements-dev.txt
+            backend/requirements.txt
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Install test dependencies
+        run: |
+          python -m pip install -r requirements-dev.txt -r backend/requirements.txt
+          npm ci
+          npx playwright install --with-deps chromium
+      - name: Backend and infrastructure checks
+        run: |
+          python -m pytest tests -q
+          cfn-lint template.yaml
+          python scripts/validate_security.py
+          npm run check:js
+      - name: Start local fictional preview
+        run: |
+          python scripts/serve.py > /tmp/orderproof-preview.log 2>&1 &
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:8080/ > /dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/orderproof-preview.log
+          exit 1
+      - name: Browser and accessibility checks
+        run: |
+          npm run test:support
+          npm run test:auth-email
+          npm run test:browser
+      - name: Attach UI test screenshots
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        with:
+          name: ui-test-evidence
+          path: |
+            /tmp/orderproof-*.png
+            /tmp/orderproof-preview.log
+          if-no-files-found: ignore
+          retention-days: 7

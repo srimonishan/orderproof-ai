@@ -1,0 +1,17 @@
+{
+  "name": "orderproof",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Embeddable business support, human handoff, and preserved conversation records",
+  "scripts": {
+    "preview": "python3 scripts/serve.py",
+    "test:browser": "node tests/browser.cjs",
+    "check:js": "node --check backend/static/app.js && node --check backend/static/support.js && node --check backend/static/widget.js && node --check backend/static/embed.js && node --check backend/static/email-preview.js",
+    "test:support": "node tests/support-browser.cjs",
+    "test:auth-email": "node tests/auth-email-browser.cjs"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.13.0",
+    "playwright": "1.63.0"
+  }
+}

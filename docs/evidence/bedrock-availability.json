@@ -1,0 +1,14 @@
+{
+  "at": "2026-09-20T06:01:09.568879+00:00",
+  "region": "us-west-2",
+  "profiles": [
+    "us.amazon.nova-micro-v1:0"
+  ],
+  "model": "us.amazon.nova-micro-v1:0",
+  "ok": false,
+  "error": {
+    "Message": "Too many tokens per day, please wait before trying again.",
+    "Code": "ThrottlingException"
+  },
+  "requestId": "d7601a94-2636-4151-8aea-a7a560bf0e30"
+}

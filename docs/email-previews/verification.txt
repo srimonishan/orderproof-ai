@@ -1,0 +1,15 @@
+Your OrderProof verification code
+
+One small step. A secure start.
+
+Use the code below to finish the account action you requested in OrderProof.
+
+Your code: 123456
+
+Never share your verification code.
+
+Return to OrderProof: https://tapuxp0ed4.execute-api.us-east-1.amazonaws.com/app
+
+If you did not request this code, you can ignore this email. No action is needed.
+
+Privacy: https://tapuxp0ed4.execute-api.us-east-1.amazonaws.com/privacy

@@ -1,0 +1,16 @@
+.venv/
+__pycache__/
+.pytest_cache/
+.aws-sam/
+node_modules/
+.env
+.env.*
+!.env.example
+*.zip
+playwright-report/
+test-results/
+
+.DS_Store
+*.pyc
+.coverage
+htmlcov/

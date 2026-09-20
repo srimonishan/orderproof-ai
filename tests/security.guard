@@ -1,0 +1,29 @@
+rule private_order_store {
+    Resources.Orders.Properties.SSESpecification.SSEEnabled == true
+    Resources.Orders.DeletionPolicy == 'Retain'
+    Resources.Orders.UpdateReplacePolicy == 'Retain'
+}
+rule authentication {
+    Resources.SellerClient.Properties.GenerateSecret == false
+    Resources.SellerClient.Properties.EnableTokenRevocation == true
+    Resources.Sellers.Properties.AutoVerifiedAttributes[*] == 'email'
+    Resources.Sellers.Properties.Policies.PasswordPolicy.MinimumLength >= 12
+    Resources.App.Properties.Events.Private.Properties.Auth.Authorizer == 'SellerJWT'
+}
+rule bounded_compute_and_logging {
+    Resources.App.Properties.Timeout <= 29
+    Resources.App.Properties.MemorySize <= 256
+    Resources.AppLogs.Properties.RetentionInDays <= 7
+    Resources.ApiLogs.Properties.RetentionInDays <= 7
+    Resources.Api.Properties.DefaultRouteSettings.ThrottlingRateLimit <= 5
+}
+rule support_record_protection {
+    Resources.Support.Properties.SSESpecification.SSEEnabled == true
+    Resources.SupportEvents.Properties.SSESpecification.SSEEnabled == true
+    Resources.TranscriptArchive.Properties.PublicAccessBlockConfiguration.BlockPublicPolicy == true
+    Resources.TranscriptArchive.Properties.PublicAccessBlockConfiguration.BlockPublicAcls == true
+    Resources.TranscriptArchive.Properties.VersioningConfiguration.Status == 'Enabled'
+    Resources.TranscriptArchive.Properties.ObjectLockConfiguration.Rule.DefaultRetention.Mode == 'GOVERNANCE'
+    Resources.TranscriptArchive.Properties.ObjectLockConfiguration.Rule.DefaultRetention.Days >= 30
+    Resources.TranscriptArchive.DeletionPolicy == 'Retain'
+}

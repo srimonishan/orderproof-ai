@@ -1,0 +1,15 @@
+{
+  "checkedAt": "2026-09-20T06:34:15.592846+00:00",
+  "region": "us-east-1",
+  "cognitoSender": "COGNITO_DEFAULT",
+  "resendAccepted": true,
+  "ownerAccountStatus": "CONFIRMED",
+  "ownerEmailVerified": true,
+  "inboxPlacement": "not_observed",
+  "sesSendingEnabled": true,
+  "sesProductionAccessEnabled": false,
+  "sesVerifiedIdentities": 0,
+  "route53HostedZones": 0,
+  "brandedTemplates": "prepared; conditional SES branch disabled",
+  "actualAdditionalCustomerEmailsSent": false
+}

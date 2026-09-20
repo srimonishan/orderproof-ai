@@ -1,0 +1,7 @@
+{
+  "recommendedName": "orderproof-ai",
+  "description": "Embeddable AI customer support on AWS with company-grounded RAG, human handoff, and verifiable conversation records.",
+  "homepage": "https://tapuxp0ed4.execute-api.us-east-1.amazonaws.com",
+  "topics": ["aws", "amazon-bedrock", "rag", "customer-support", "chatbot", "serverless", "python", "dynamodb", "cognito", "saas"],
+  "publicationStatus": "Prepared locally; no GitHub repository was created or published."
+}

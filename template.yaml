@@ -1,0 +1,332 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: OrderProof - private conversation-to-order review and revision-specific customer confirmation. Low-traffic hackathon deployment.
+Metadata:
+  AWSToolsMetrics:
+    AWSAgentToolkit: aws-cloudformation@3
+Parameters:
+  EmailIdentityArn:
+    Type: String
+    Default: ''
+    Description: Verified SES domain identity in this region; keep empty until domain authentication and production access are ready.
+  EmailFrom:
+    Type: String
+    Default: ''
+    AllowedPattern: '^$|[A-Za-z0-9._%+\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,}'
+    Description: Sender at the verified domain. Empty keeps Cognito default email and disables notifications.
+  AppOrigin:
+    Type: String
+    Default: https://tapuxp0ed4.execute-api.us-east-1.amazonaws.com
+    AllowedPattern: 'https://[a-zA-Z0-9.-]+'
+  MonthlyAiLimit:
+    Type: Number
+    Default: 500
+    MinValue: 1
+    MaxValue: 1000
+    Description: Global monthly extraction attempts. Raising this requires a cost review.
+Conditions:
+  UseSesEmail: !And [!Not [!Equals [!Ref EmailIdentityArn, '']], !Not [!Equals [!Ref EmailFrom, '']]]
+Rules:
+  EmailParametersTogether:
+    Assertions:
+      - Assert: !Or
+          - !And [!Equals [!Ref EmailIdentityArn, ''], !Equals [!Ref EmailFrom, '']]
+          - !And [!Not [!Equals [!Ref EmailIdentityArn, '']], !Not [!Equals [!Ref EmailFrom, '']]]
+        AssertDescription: Set both email parameters after verifying SES, or leave both empty.
+Resources:
+  Orders:
+    Type: AWS::DynamoDB::Table
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Metadata:
+      com.aws.cloudformation.Context:
+        why: Known key lookups for seller orders, share tokens, and atomic usage counters; no joins or ad-hoc queries.
+        must: Enforce seller ownership in the API. Retain data on stack replacement or removal.
+    Properties:
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: pk
+          AttributeType: S
+        - AttributeName: sk
+          AttributeType: S
+      KeySchema:
+        - AttributeName: pk
+          KeyType: HASH
+        - AttributeName: sk
+          KeyType: RANGE
+      SSESpecification:
+        SSEEnabled: true
+      TimeToLiveSpecification:
+        AttributeName: expires
+        Enabled: true
+      Tags:
+        - Key: Project
+          Value: OrderProof
+  Support:
+    Type: AWS::DynamoDB::Table
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions: [{AttributeName: pk, AttributeType: S}, {AttributeName: sk, AttributeType: S}]
+      KeySchema: [{AttributeName: pk, KeyType: HASH}, {AttributeName: sk, KeyType: RANGE}]
+      SSESpecification: {SSEEnabled: true}
+      TimeToLiveSpecification: {AttributeName: expires, Enabled: true}
+      Tags: [{Key: Project, Value: OrderProof}]
+  SupportEvents:
+    Type: AWS::DynamoDB::Table
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions: [{AttributeName: pk, AttributeType: S}, {AttributeName: sk, AttributeType: S}]
+      KeySchema: [{AttributeName: pk, KeyType: HASH}, {AttributeName: sk, KeyType: RANGE}]
+      SSESpecification: {SSEEnabled: true}
+      TimeToLiveSpecification: {AttributeName: expires, Enabled: true}
+      Tags: [{Key: Project, Value: OrderProof}]
+  TranscriptArchive:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Properties:
+      VersioningConfiguration: {Status: Enabled}
+      ObjectLockEnabled: true
+      ObjectLockConfiguration:
+        ObjectLockEnabled: Enabled
+        Rule:
+          DefaultRetention: {Mode: GOVERNANCE, Days: 30}
+      OwnershipControls:
+        Rules: [{ObjectOwnership: BucketOwnerEnforced}]
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault: {SSEAlgorithm: AES256}
+      LifecycleConfiguration:
+        Rules:
+          - Id: ExpirePilotRecords
+            Status: Enabled
+            ExpirationInDays: 90
+            NoncurrentVersionExpiration: {NoncurrentDays: 1}
+            AbortIncompleteMultipartUpload: {DaysAfterInitiation: 1}
+      Tags: [{Key: Project, Value: OrderProof}]
+  ArchivePolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref TranscriptArchive
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Deny
+            Principal: '*'
+            Action: 's3:*'
+            Resource: [!GetAtt TranscriptArchive.Arn, !Sub '${TranscriptArchive.Arn}/*']
+            Condition:
+              Bool: {'aws:SecureTransport': 'false'}
+  Sellers:
+    Type: AWS::Cognito::UserPool
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Metadata:
+      com.aws.cloudformation.Context:
+        why: Verified email seller accounts with managed password storage.
+        must: Email verification required. Preserve accounts on stack replacement.
+    Properties:
+      UserPoolName: !Sub '${AWS::StackName}-sellers'
+      UserPoolTier: LITE
+      EmailConfiguration: !If
+        - UseSesEmail
+        - EmailSendingAccount: DEVELOPER
+          SourceArn: !Ref EmailIdentityArn
+          From: !Sub 'OrderProof <${EmailFrom}>'
+        - EmailSendingAccount: COGNITO_DEFAULT
+      # BEGIN BRANDED VERIFICATION TEMPLATE
+      VerificationMessageTemplate:
+        DefaultEmailOption: CONFIRM_WITH_CODE
+        EmailSubject: !If [UseSesEmail, "Your OrderProof verification code", !Ref "AWS::NoValue"]
+        EmailMessage: !If
+          - UseSesEmail
+          - !Sub |
+            <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><title>Your OrderProof verification code</title></head><body style="margin:0;padding:0;background:#f4f7f5;color:#20352b;font-family:Arial,Helvetica,sans-serif;">
+            <div style="display:none;max-height:0;overflow:hidden;opacity:0;">Use the code below to finish the account action you requested in OrderProof.</div>
+            <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#f4f7f5;"><tr><td align="center" style="padding:32px 12px;">
+            <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:580px;border:1px solid #dbe6de;border-radius:16px;background:#ffffff;overflow:hidden;">
+            <tr><td style="padding:26px 30px;background:#245e4c;color:#ffffff;font-size:24px;font-weight:700;letter-spacing:-.5px;">OrderProof<span style="display:block;margin-top:8px;font-size:13px;font-weight:400;letter-spacing:0;color:#ffffff;">Support, with a record.</span></td></tr>
+            <tr><td style="padding:30px;"><p style="margin:0 0 12px;color:#53675d;font-size:12px;font-weight:700;letter-spacing:1px;">ACCOUNT SECURITY</p><h1 style="margin:0 0 16px;font-size:28px;line-height:1.25;letter-spacing:-.7px;">One small step. A secure start.</h1><p style="margin:0;font-size:16px;line-height:1.8;color:#435a4d;">Use the code below to finish the account action you requested in OrderProof.</p><p style="margin:24px 0;padding:20px 12px;background:#edf5ef;border:1px solid #cadfd1;border-radius:10px;text-align:center;font-size:32px;font-weight:700;letter-spacing:6px;color:#173f31;">{####}</p><p style="font-size:14px;line-height:1.7;color:#53675d;">Use the most recent code. Never share it with anyone, including support. If it has expired, request a new code in the app.</p>
+            <table role="presentation" cellspacing="0" cellpadding="0"><tr><td bgcolor="#245e4c" style="border-radius:8px;"><a target="_blank" rel="noopener noreferrer" href="${AppOrigin}/app" style="display:inline-block;padding:15px 22px;border:1px solid #245e4c;border-radius:8px;color:#ffffff;text-decoration:none;font-size:15px;font-weight:700;">Return to OrderProof</a></td></tr></table>
+            <p style="margin:26px 0 0;font-size:13px;line-height:1.7;color:#53675d;">If you did not request this code, you can ignore this email. No action is needed.</p></td></tr>
+            <tr><td style="padding:20px 30px;border-top:1px solid #e3ebe6;font-size:12px;line-height:1.8;color:#53675d;">OrderProof · Helpful answers. Human connection.<br><a target="_blank" rel="noopener noreferrer" href="${AppOrigin}/privacy" style="color:#245e4c;">Privacy &amp; retention</a> · This is an automated message; replies are not monitored.</td></tr></table>
+            <p style="max-width:550px;margin:18px auto 0;color:#53675d;font-size:12px;line-height:1.7;">If the button does not work, open <a target="_blank" rel="noopener noreferrer" href="${AppOrigin}/app" style="color:#245e4c;overflow-wrap:anywhere;">${AppOrigin}/app</a>.</p>
+            </td></tr></table></body></html>
+          - !Ref "AWS::NoValue"
+      # END BRANDED VERIFICATION TEMPLATE
+      UsernameAttributes: [email]
+      AutoVerifiedAttributes: [email]
+      UsernameConfiguration:
+        CaseSensitive: false
+      Policies:
+        PasswordPolicy:
+          MinimumLength: 12
+          RequireLowercase: true
+          RequireUppercase: true
+          RequireNumbers: true
+          RequireSymbols: true
+      AccountRecoverySetting:
+        RecoveryMechanisms:
+          - Name: verified_email
+            Priority: 1
+      UserPoolTags:
+        Project: OrderProof
+  SellerClient:
+    Type: AWS::Cognito::UserPoolClient
+    Metadata:
+      com.aws.cloudformation.Context:
+        why: Public browser client; password auth over TLS without embedding a secret.
+        must: No client secret. Browser tokens kept only in tab memory.
+    Properties:
+      UserPoolId: !Ref Sellers
+      GenerateSecret: false
+      ExplicitAuthFlows: [ALLOW_USER_PASSWORD_AUTH, ALLOW_REFRESH_TOKEN_AUTH]
+      PreventUserExistenceErrors: ENABLED
+      EnableTokenRevocation: true
+      AccessTokenValidity: 30
+      IdTokenValidity: 30
+      RefreshTokenValidity: 1
+      TokenValidityUnits:
+        AccessToken: minutes
+        IdToken: minutes
+        RefreshToken: days
+  ApiLogs:
+    Type: AWS::Logs::LogGroup
+    Metadata:
+      com.aws.cloudformation.Context:
+        why: Operational request metadata without paths, tokens, or request bodies.
+        must: Retain logs only seven days and never log private conversations.
+    Properties:
+      RetentionInDays: 7
+  Api:
+    Type: AWS::Serverless::HttpApi
+    Metadata:
+      com.aws.cloudformation.Context:
+        why: Public HTTPS application with JWT-protected seller routes.
+        must: Protected routes require Cognito JWT; public customer views use revocable capability links.
+    Properties:
+      StageName: '$default'
+      DefaultRouteSettings:
+        ThrottlingBurstLimit: 10
+        ThrottlingRateLimit: 5
+      AccessLogSettings:
+        DestinationArn: !GetAtt ApiLogs.Arn
+        Format: '{"requestId":"$context.requestId","status":"$context.status","integrationError":"$context.integrationErrorMessage"}'
+      Auth:
+        Authorizers:
+          SellerJWT:
+            IdentitySource: '$request.header.Authorization'
+            JwtConfiguration:
+              issuer: !Sub 'https://cognito-idp.${AWS::Region}.amazonaws.com/${Sellers}'
+              audience: [!Ref SellerClient]
+  App:
+    Type: AWS::Serverless::Function
+    Metadata:
+      com.aws.cloudformation.Context:
+        why: Serves the small web app and synchronous order API without idle compute or a NAT gateway.
+        must: Validate inputs, enforce ownership and revision checks, bound model tokens and usage; no conversation logging.
+    Properties:
+      CodeUri: backend/
+      Handler: app.handler
+      Runtime: python3.13
+      Architectures: [arm64]
+      MemorySize: 256
+      Timeout: 29
+      Environment:
+        Variables:
+          EMAIL_FROM: !Ref EmailFrom
+          APP_ORIGIN: !Ref AppOrigin
+          SUPPORT_TABLE: !Ref Support
+          EVENTS_TABLE: !Ref SupportEvents
+          ARCHIVE_BUCKET: !Ref TranscriptArchive
+          TABLE_NAME: !Ref Orders
+          CLIENT_ID: !Ref SellerClient
+          POOL_ID: !Ref Sellers
+          MODEL_ID: amazon.nova-lite-v1:0
+          BEDROCK_REGION: us-west-2
+          MONTHLY_AI_LIMIT: !Ref MonthlyAiLimit
+      Policies:
+        - !If
+          - UseSesEmail
+          - Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action: cognito-idp:AdminGetUser
+                Resource: !GetAtt Sellers.Arn
+              - Effect: Allow
+                Action: ses:SendEmail
+                Resource: !Ref EmailIdentityArn
+                Condition:
+                  StringEquals:
+                    'ses:FromAddress': !Ref EmailFrom
+          - !Ref AWS::NoValue
+        - Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Action: [dynamodb:GetItem, dynamodb:PutItem, dynamodb:UpdateItem, dynamodb:DeleteItem, dynamodb:Query]
+              Resource: !GetAtt Orders.Arn
+            - Effect: Allow
+              Action: [dynamodb:GetItem, dynamodb:PutItem, dynamodb:UpdateItem, dynamodb:DeleteItem, dynamodb:Query]
+              Resource: !GetAtt Support.Arn
+            - Effect: Allow
+              Action: [dynamodb:GetItem, dynamodb:PutItem, dynamodb:Query]
+              Resource: !GetAtt SupportEvents.Arn
+            - Effect: Allow
+              Action: [s3:PutObject, s3:GetObjectVersion]
+              Resource: !Sub '${TranscriptArchive.Arn}/transcripts/*'
+            - Effect: Allow
+              Action: bedrock:InvokeModel
+              Resource: !Sub 'arn:${AWS::Partition}:bedrock:us-west-2::foundation-model/amazon.nova-lite-v1:0'
+      Events:
+        Root:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref Api
+            Path: /
+            Method: GET
+        Public:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref Api
+            Path: /{proxy+}
+            Method: ANY
+        Private:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref Api
+            Path: /api/{proxy+}
+            Method: ANY
+            Auth:
+              Authorizer: SellerJWT
+      Tags:
+        Project: OrderProof
+  AppLogs:
+    Type: AWS::Logs::LogGroup
+    Metadata:
+      com.aws.cloudformation.Context:
+        why: Short retention operational logs for application failures.
+        must: No raw request bodies or tokens.
+    Properties:
+      LogGroupName: !Sub '/aws/lambda/${App}'
+      RetentionInDays: 7
+Outputs:
+  AppUrl:
+    Description: Public app and judge walkthrough
+    Value: !Sub 'https://${Api}.execute-api.${AWS::Region}.amazonaws.com'
+  UserPoolId:
+    Value: !Ref Sellers
+  ClientId:
+    Value: !Ref SellerClient
+  TableName:
+    Value: !Ref Orders
+  FunctionName:
+    Value: !Ref App

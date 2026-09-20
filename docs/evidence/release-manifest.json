@@ -1,0 +1,13 @@
+{
+  "createdAt": "2026-09-20T06:34:15.593024+00:00",
+  "files": {
+    "backend/app.py": "b9fa24fae8d5827f22b810996835356f9068a4d58931ad4f249e7b9535e9f858",
+    "backend/support.py": "ef6784709ed3acb873d3cd3dc31d5bb3a7baa8e9a05eb11a2de075848b5a398b",
+    "backend/mail_templates.py": "3d34cdbc7676afbbaa24cf1857fab8ac51c6023f922b8318e92d207d80f3640e",
+    "backend/notifications.py": "1479a873a6531fd2eaa2566a1a206ef783a0fe1bd276365edcbcdd3007b4fbd4",
+    "backend/static/support.js": "c3e289640c3030536e1b73d7555bb4f393f371d907bc4117e031b91cb96a6e4c",
+    "backend/static/widget.js": "d7cb3333f4de7159f83791c1111d9aac94bf80946ab047de9524dfaf8c0fab92",
+    "backend/static/embed.js": "11a91cc0b7b43199095077c5cad30252830bc7c3429166c3f6b944bcac504b5a",
+    "template.yaml": "a81c3f88eaae999b17f15844bdff9efa5e60db5db88ecfa3b7450ffc776d791a"
+  }
+}

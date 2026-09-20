@@ -1,0 +1,24 @@
+Subject: Restore usable Amazon Bedrock Nova token quotas for a small capped application
+
+Region: us-west-2 (application infrastructure in us-east-1)
+Models: amazon.nova-lite-v1:0; amazon.nova-micro-v1:0 for text-only low-cost support
+
+We are developing an AWS-hosted customer-support application using approved company passages and the Bedrock Converse API. Realistic first/small requests fail with:
+ThrottlingException: Too many tokens per day.
+
+The applied Amazon Nova Lite cross-region tokens-per-minute quota is 0 (L-7C42E72A). An API request for a modest 10,000 TPM was rejected:
+IllegalArgumentException: You must provide a quota value greater than the default quota value of 8000000.0.
+The Nova Lite on-demand daily quota was also reported as 0 and non-adjustable (L-45E0AD92).
+
+We need a usable baseline quota/account eligibility review, not provisioned throughput or a large capacity increase. Application usage is capped at 500 AI attempts per month, with at most 550 output tokens per support reply and additional per-tenant limits. The intended AWS operating budget is below $10/month for low traffic. No capacity purchase is requested.
+
+Please explain whether an account/billing verification step is required and restore a small usable on-demand quota for a supported Amazon Nova model, or identify the supported account-resolution process. Model access through IAM is already configured; the error is token quota throttling rather than AccessDenied.
+
+Attach the most recent failed request ID and timestamp from Bedrock diagnostics if requested. Do not include credentials, customer chats, or access tokens.
+
+Latest verified failure:
+Model/profile: us.amazon.nova-micro-v1:0
+Region: us-west-2
+Timestamp: 2026-09-20T06:01:09.568879+00:00
+Request ID: d7601a94-2636-4151-8aea-a7a560bf0e30
+Error: ThrottlingException: Too many tokens per day, please wait before trying again.

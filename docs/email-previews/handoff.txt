@@ -1,0 +1,15 @@
+A customer is waiting in your OrderProof inbox
+
+Your human touch is needed.
+
+A customer requested a person. Open your inbox to read the conversation and join when you are ready.
+
+Workspace: Evergreen Studio (fictional preview)
+
+No private conversation content is included in this email.
+
+Open your inbox: https://tapuxp0ed4.execute-api.us-east-1.amazonaws.com/app
+
+You receive this transactional update because email notifications are enabled for your workspace. Manage them in Settings.
+
+Privacy: https://tapuxp0ed4.execute-api.us-east-1.amazonaws.com/privacy

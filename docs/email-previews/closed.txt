@@ -1,0 +1,15 @@
+Your OrderProof conversation record is ready
+
+The conversation. Kept together.
+
+A support conversation has been closed and archived. Sign in to review, verify, or export its preserved record.
+
+Workspace: Evergreen Studio (fictional preview)
+
+No private conversation content is included in this email.
+
+Open your inbox: https://tapuxp0ed4.execute-api.us-east-1.amazonaws.com/app
+
+You receive this transactional update because email notifications are enabled for your workspace. Manage them in Settings.
+
+Privacy: https://tapuxp0ed4.execute-api.us-east-1.amazonaws.com/privacy

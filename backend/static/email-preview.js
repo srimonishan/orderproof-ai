@@ -1,0 +1,1 @@
+document.addEventListener('click',e=>{const button=e.target.closest('[data-kind]');if(!button)return;document.querySelectorAll('[data-kind]').forEach(b=>b.classList.toggle('active',b===button));const frame=document.querySelector('.email-frame');frame.src='/email-'+button.dataset.kind+'.html';frame.title=button.textContent+' email design preview';});

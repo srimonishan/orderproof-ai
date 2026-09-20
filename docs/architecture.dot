@@ -1,0 +1,35 @@
+digraph OrderProof {
+  graph [rankdir=TB, bgcolor="#f4f7f5", pad="0.45", nodesep="0.45", ranksep="0.7", fontname="DejaVu Sans", fontsize=24, label="OrderProof  |  AWS architecture", labelloc=t, fontcolor="#173f31", compound=true];
+  node [shape=box, style="rounded,filled", fillcolor="#ffffff", color="#c9dcd0", penwidth=1.4, fontname="DejaVu Sans", fontsize=14, fontcolor="#20352b", margin="0.22,0.18"];
+  edge [color="#6b8f7a", penwidth=1.5, arrowsize=.7, fontname="DejaVu Sans", fontsize=10, fontcolor="#53675d"];
+  subgraph cluster_channels {
+    label="CUSTOMER & BUSINESS EXPERIENCES"; fontsize=12; color="#dce7df"; style="rounded"; margin=18;
+    website [label="Website / React\nIsolated chat widget"];
+    mobile [label="iOS / Android\nHosted WebView examples"];
+    standalone [label="Hosted support page\nNative / server API clients"];
+    owner [label="Business workspace\nKnowledge · inbox · records", fillcolor="#e5f0e9"];
+  }
+  cognito [label="Amazon Cognito\nBusiness sign-in + verified email", fillcolor="#e5f0e9"];
+  api [label="Amazon API Gateway\nHTTPS · JWT-protected owner routes\nConversation-scoped customer tokens", fillcolor="#dceee3", color="#245e4c"];
+  app [label="AWS Lambda · Python\nTenant authorization + trial limits\nApproved-passage retrieval\nHuman handoff + event transactions", fillcolor="#245e4c", color="#245e4c", fontcolor="#ffffff", penwidth=2];
+  subgraph cluster_records {
+    label="PRIVATE APPLICATION DATA · us-east-1"; fontsize=12; color="#dce7df"; style="rounded"; margin=18;
+    metadata [label="Amazon DynamoDB\nBusiness profiles + approved sources\nConversation state + usage limits"];
+    events [label="Amazon DynamoDB\nAppend-only event API\nSequence + SHA-256 chain"];
+    archive [label="Amazon S3\nClosed transcript versions\n30-day governance protection"];
+  }
+  bedrock [label="Amazon Bedrock · Nova Lite\nus-west-2\nLIVE GENERATION: QUOTA BLOCKED", fillcolor="#fff1d7", color="#c08a36", fontcolor="#765015"];
+  ses [label="Amazon SES\nBranded transactional notices\nPREPARED: SENDER SETUP PENDING", fillcolor="#edf0f5", color="#a0adbe", fontcolor="#49596e"];
+  website -> api;
+  mobile -> api;
+  standalone -> api;
+  owner -> api;
+  owner -> cognito [label="sign in"];
+  cognito -> api [label="JWT validation", style=dashed];
+  api -> app;
+  app -> metadata [label="tenant-scoped lookups"];
+  app -> events [label="atomic append"];
+  app -> archive [label="seal + verify"];
+  app -> bedrock [label="retrieved passages\n+ recent context", style=dashed, color="#c08a36"];
+  app -> ses [label="verified owner + opt-in\nno chat body in email", style=dashed, color="#a0adbe"];
+}

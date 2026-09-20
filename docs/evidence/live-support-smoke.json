@@ -1,0 +1,20 @@
+{
+  "testedAt": "2026-09-20T06:35:21Z",
+  "url": "https://tapuxp0ed4.execute-api.us-east-1.amazonaws.com",
+  "checks": [
+    "anonymous business access denied",
+    "Cognito owner workspace and trial created",
+    "approved knowledge persisted",
+    "cross-tenant and wrong-token access denied",
+    "customer message saved; model outcome: unavailable-fallback",
+    "workspace model-readiness status reflects the actual attempt",
+    "message retry did not duplicate the record",
+    "customer-to-human handoff and reply visible to customer",
+    "closed transcript and protected S3 version match",
+    "customer exported complete transcript",
+    "plan preference cannot activate paid access"
+  ],
+  "bedrock": "unavailable-fallback",
+  "syntheticConversationId": "b17b1434e36c101166451bcc",
+  "note": "Synthetic test records retained according to the archive lifecycle. Temporary test login accounts removed."
+}

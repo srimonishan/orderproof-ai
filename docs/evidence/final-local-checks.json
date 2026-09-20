@@ -1,0 +1,21 @@
+{
+  "checkedAt": "2026-09-20T09:24:42.147795+00:00",
+  "pythonTests": {
+    "passed": 47
+  },
+  "infrastructure": {
+    "cfnLint": "passed",
+    "guardRules": 4,
+    "guard": "passed"
+  },
+  "javascriptSyntax": "passed",
+  "localBrowserSuites": {
+    "support": "passed",
+    "authenticationAndEmail": "passed; Cognito mocked, no email sent",
+    "originalOrderFlow": "passed"
+  },
+  "deployedEmailBrowserSuite": "passed; Cognito mocked, actual deployed HTML previews checked, no email sent",
+  "documentationLinks": "passed",
+  "workflowYaml": "parsed successfully; GitHub-hosted workflow not yet run",
+  "productionRelease": "blocked: Bedrock quota and email sender configuration; see final-audit.md"
+}
