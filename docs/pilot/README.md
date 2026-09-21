@@ -1,6 +1,6 @@
 # Real-business pilot
 
-Status: **prepared, not started**. No business participation, customer demand, measured savings, or successful live AI outcomes are claimed.
+Status: **prepared, not started**. The founder named OrderProof as the participant; see [internal usability pilot](orderproof-internal-pilot.md). This is not an independent business pilot. No business participation, customer demand, measured savings, or successful live AI outcomes are claimed.
 
 ## 1. Recruit one consenting business
 

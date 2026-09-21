@@ -67,3 +67,7 @@ The fresh live workflow on September 20 again returned the explicit unavailable 
 - A five-case live model evaluation is prepared; it stops on the first quota failure and records zero completed cases, not a false pass.
 - AWS accepted a Nova Lite cross-region TPM request; status PENDING. See evidence/quota-request.json. Approval and a successful model invocation remain required.
 - The GitHub browser hang was isolated to accessibility traversal of sandboxed email iframes. Gallery checks now skip iframe traversal; each template is independently tested as a full document. GitHub-hosted CI completed successfully: https://github.com/srimonishan/orderproof-ai/actions/runs/35516627127.
+
+## Demo transparency and pilot preparation — September 21, 2026
+
+Persistent fictional-demo notices now appear across the workspace. The demo widget explicitly says its conversation is unsaved, and prepared answers are identified as non-Bedrock. The illustrative return policy is consistent across the workspace and widget. The pilot kit includes a blank observation sheet, consent and measurement guidance, and a report generator that rejects empty/synthetic inputs. The founder selected OrderProof itself: an internal usability protocol is prepared, but no human observations or independent market validation have been collected. Production readiness remains blocked by the unresolved AI quota and other release gates.
