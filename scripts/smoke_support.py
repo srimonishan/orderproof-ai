@@ -63,6 +63,13 @@ try:
     closed=req(private+'/close','POST',{'requestId':'close'},jwt=one);assert closed['archive']['versionId']
     check=req(private+'/verify',jwt=one);assert check['valid'] and check['archiveValid'];checks.append('closed transcript and protected S3 version match')
     transcript=req(public+'/export',token=t);assert transcript['status']=='closed' and any(m['role']=='agent' for m in transcript['messages']);checks.append('customer exported complete transcript')
+    feedback={'resolution':'partly','rating':3,'comment':'Synthetic feedback verification.'}
+    req(public+'/feedback','POST',feedback,token='wrong',expected=404)
+    assert req(public+'/feedback','POST',feedback,token=t)['rating']==3
+    assert req(private,jwt=one)['feedback']['resolution']=='partly'
+    assert req(public+'/export',token=t)==transcript
+    assert req(private+'/verify',jwt=one)['archiveValid']
+    checks.append('optional customer feedback persisted separately; sealed export unchanged')
     req(public+'/messages','POST',{'requestId':'late','content':'Cannot change closed transcript'},token=t,expected=409)
     assert req('/api/support/select-plan','POST',{'plan':'growth'},jwt=one)['billingEnabled'] is False
     assert req('/api/support/business',jwt=one)['plan']=='trial';checks.append('plan preference cannot activate paid access')

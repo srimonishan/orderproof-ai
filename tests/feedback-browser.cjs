@@ -2,9 +2,10 @@ const {chromium}=require('playwright');
 const AxeBuilder=require('@axe-core/playwright').default;
 const assert=require('node:assert/strict');
 (async()=>{
-const browser=await chromium.launch({executablePath:'/usr/bin/chromium',headless:true,args:['--no-sandbox']});
+const browser=await chromium.launch({executablePath:process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE||(require('node:fs').existsSync('/usr/bin/chromium')?'/usr/bin/chromium':undefined),headless:true,args:['--no-sandbox']});
 try {
-const page=await browser.newPage({viewport:{width:390,height:844}});
+const context=await browser.newContext({viewport:{width:390,height:844}});
+const page=await context.newPage();
 const base=process.env.ORDERPROOF_URL||'http://127.0.0.1:8080';
 const cid='a'.repeat(24), site='b'.repeat(24); let feedback=null, attempts=0;
 await page.route('**/public/support/**',async route=>{

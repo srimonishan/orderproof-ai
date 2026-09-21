@@ -1,5 +1,5 @@
 {
-  "testedAt": "2026-09-20T14:29:19Z",
+  "testedAt": "2026-09-21T18:14:23Z",
   "url": "https://tapuxp0ed4.execute-api.us-east-1.amazonaws.com",
   "checks": [
     "anonymous business access denied",
@@ -12,9 +12,10 @@
     "customer-to-human handoff and reply visible to customer",
     "closed transcript and protected S3 version match",
     "customer exported complete transcript",
+    "optional customer feedback persisted separately; sealed export unchanged",
     "plan preference cannot activate paid access"
   ],
   "bedrock": "unavailable-fallback",
-  "syntheticConversationId": "09ddf66e8d4b71d48f3186be",
+  "syntheticConversationId": "6845018a3bcb64b052cf548a",
   "note": "Synthetic test records retained according to the archive lifecycle. Temporary test login accounts removed."
 }

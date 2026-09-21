@@ -77,3 +77,13 @@ Persistent fictional-demo notices now appear across the workspace. The demo widg
 67 tests pass locally after adding a standard-library offline transcript verifier. Coverage includes saved citation continuity after source deletion, exported JSON compatibility, tampered text/citations, ordering, final digests, and rewritten-chain rejection against a separately trusted digest. This improves verification portability; it is not cryptographic authorship or identity proof. A four-minute demonstration guide is available in `innovation-demo.md`.
 
 Luna was tested on its model-specific Bedrock Mantle path: HTTP 401, `access_denied`, model unavailable for this account. Its nonzero quotas do not imply access. Live AI remains blocked; the deployed model is unchanged.
+
+## Customer feedback release — September 21, 2026
+
+Deployed to the existing AWS stack; CloudFormation reached UPDATE_COMPLETE. Optional post-closure resolution, helpfulness, and comment submission is available in the widget. Owners see responses in conversation details. Conditional writes prevent replacement; identical retries succeed. Feedback uses the conversation's expiry and remains separate from transcript events and the sealed archive. No additional AWS service was introduced.
+
+Validation: 75 backend tests passed; JavaScript syntax, CloudFormation lint and security rules passed. Feedback mobile accessibility, failed-request retry preservation, reload persistence, and optional restart flow passed with mocked API fixtures. Existing support, authentication/email-preview, and legacy browser suites passed. Email preview tests do not establish real inbox delivery.
+
+The deployed synthetic integration test verified feedback persistence, unchanged exported transcript and protected archive, tenant isolation, human handoff, and export. See `docs/evidence/live-support-smoke.json` (2026-09-21T18:14:23Z). The live AI attempt still returned unavailable fallback: this is not successful generated-answer evaluation.
+
+The independent-business kit includes consent, comparable baselines, correction/retrieval observations, return usage, commercial interviews, and an owner-approved case-study template. No independent participant or impact results have been invented. Production approval remains outstanding while live AI evaluation and genuine pilot evidence are missing; submission and eligibility confirmations remain separate checklist items.

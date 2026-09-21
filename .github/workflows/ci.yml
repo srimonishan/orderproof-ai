@@ -54,6 +54,7 @@ jobs:
           exit 1
       - name: Browser and accessibility checks
         run: |
+          node tests/feedback-browser.cjs
           npm run test:support
           npm run test:auth-email
           npm run test:browser

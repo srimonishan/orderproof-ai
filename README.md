@@ -36,6 +36,8 @@ Small businesses repeatedly answer policy questions. Customers repeat themselves
 4. **Continue with a person:** the owner joins the same conversation without losing its history.
 5. **Preserve the outcome:** close, verify, and export the complete conversation record.
 
+After a conversation closes, customers can optionally report whether their issue was resolved, rate helpfulness from 1–5, and leave a comment. The business sees this feedback in the conversation details; the sealed transcript stays unchanged.
+
 ## Conversation reports and export
 
 ![Conversation records in the deployed OrderProof interface](docs/evidence/screenshots/orderproof-records.png)
@@ -136,6 +138,7 @@ template.yaml            AWS SAM infrastructure
 
 - [Final audit and production release gates](docs/final-audit.md)
 - [Real-business pilot and measurement guide](docs/pilot/README.md)
+- [Independent business pilot kit and case study](docs/pilot/business-pilot-kit.md)
 - [Product scope](docs/product-v2.md)
 - [Integration and API guide](docs/integrations.md)
 - [Billing, limits, and operations](docs/billing-and-operations.md)
