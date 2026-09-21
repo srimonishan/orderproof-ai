@@ -40,7 +40,7 @@ Small businesses repeatedly answer policy questions. Customers repeat themselves
 
 ![Conversation records in the deployed OrderProof interface](docs/evidence/screenshots/orderproof-records.png)
 
-The core report is an exportable conversation transcript: customer messages, assistant replies, human responses, timestamps, and source references in one record. Closed conversations are archived and can be checked against their stored hash chain and S3 version. Export produces JSON; this is not a generated PDF report or an AI-written summary.
+The core report is an exportable conversation transcript: customer messages, assistant replies, human responses, timestamps, and source references in one record. Closed conversations are archived and can be checked against their stored hash chain and S3 version. Export produces JSON; this is not a generated PDF report or an AI-written summary. An [offline verifier](scripts/verify_transcript.py) checks event and citation integrity without AWS credentials. A separately trusted final digest is required to detect a wholly rewritten chain. See the [policy-change demonstration](docs/innovation-demo.md).
 
 *UI screenshots show the deployed application. The records screenshot contains clearly labeled fictional demo data, not a live AI output.*
 

@@ -12,7 +12,7 @@ For a small online business, a simple return question can become a fragmented ex
 
 ## What I built
 
-OrderProof is an embeddable support workspace. A business approves its own policies, installs a website widget, and manages customer conversations in one inbox. The model integration retrieves relevant approved passages and validates source identifiers. A person can join the same conversation. On closure, the service creates a versioned archive that can be checked against the conversation’s hash chain. The customer can export the transcript too.
+OrderProof is an embeddable support workspace. A business approves its own policies, installs a website widget, and manages customer conversations in one inbox. The model integration retrieves relevant approved passages and validates source identifiers. A person can join the same conversation. On closure, the service creates a versioned archive that can be checked against the conversation’s hash chain. The customer can export the transcript too. An offline Python verifier checks exported event and citation integrity without AWS credentials; a separately trusted digest is necessary to detect a wholly rewritten chain. Historical citations survive source removal, while future retrieval excludes the removed source.
 
 The distinctive workflow is not simply storing messages: it connects the source passage used for an answer, the subsequent human conversation, and the preserved result. The resulting record is tamper-evident within its documented verification scope; it is not an independent proof of identity, legal certification, or an archive that no administrator can alter.
 

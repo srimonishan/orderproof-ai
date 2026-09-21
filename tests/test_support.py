@@ -161,3 +161,22 @@ def test_expired_reviewer_grant_does_not_bypass_trial():
     assert error.value.status==402
     b['trialEnds']=int(time.time())+3600
     s.ensure_active(b)
+
+
+def test_saved_citation_survives_policy_removal_and_verifies_offline(monkeypatch):
+    import importlib.util
+    spec=importlib.util.spec_from_file_location('offline',Path(__file__).parents[1]/'scripts/verify_transcript.py')
+    offline=importlib.util.module_from_spec(spec);spec.loader.exec_module(offline)
+    c,t=chat()
+    source=s.save_source('alice',{'title':'Returns','content':'Returns are accepted within 30 days for unused products.','approved':True})
+    model=Mock();model.converse.return_value={'output':{'message':{'content':[{'text':json.dumps({'answer':'Unused products can be returned within 30 days.','sourceIds':['1'],'handoff':False})}]}}}
+    monkeypatch.setattr(app,'bedrock',lambda:model)
+    code,result=call('/public/support/conversations/'+c['id']+'/messages','POST',{'requestId':'q','content':'What is the returns policy?'},owner=None,token=t)
+    assert code==200
+    s.store().delete_item(Key=s.key('BIZ#alice','SOURCE#'+source['id']))
+    saved=s.get_conversation(c['id']);export=s.transcript(saved)
+    # Round-trip exactly as the JSON API does, converting DynamoDB numbers.
+    export=json.loads(s.canon(export))
+    assert '30 days' in export['messages'][-1]['sources'][0]['excerpt']
+    assert s.retrieve('alice','returns policy')==[]
+    assert offline.verify(export,export['lastDigest'])['chainConsistent']

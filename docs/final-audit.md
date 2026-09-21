@@ -71,3 +71,9 @@ The fresh live workflow on September 20 again returned the explicit unavailable 
 ## Demo transparency and pilot preparation — September 21, 2026
 
 Persistent fictional-demo notices now appear across the workspace. The demo widget explicitly says its conversation is unsaved, and prepared answers are identified as non-Bedrock. The illustrative return policy is consistent across the workspace and widget. The pilot kit includes a blank observation sheet, consent and measurement guidance, and a report generator that rejects empty/synthetic inputs. The founder selected OrderProof itself: an internal usability protocol is prepared, but no human observations or independent market validation have been collected. Production readiness remains blocked by the unresolved AI quota and other release gates.
+
+## Portable verification upgrade
+
+67 tests pass locally after adding a standard-library offline transcript verifier. Coverage includes saved citation continuity after source deletion, exported JSON compatibility, tampered text/citations, ordering, final digests, and rewritten-chain rejection against a separately trusted digest. This improves verification portability; it is not cryptographic authorship or identity proof. A four-minute demonstration guide is available in `innovation-demo.md`.
+
+Luna was tested on its model-specific Bedrock Mantle path: HTTP 401, `access_denied`, model unavailable for this account. Its nonzero quotas do not imply access. Live AI remains blocked; the deployed model is unchanged.
