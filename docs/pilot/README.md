@@ -4,6 +4,8 @@ Status: **prepared, not started**. The founder named OrderProof as the participa
 
 ## 1. Recruit consenting independent businesses
 
+Use the [owner invitation and 20-minute session](owner-invitation.md) to start with one consenting owner. This is a draft for personal outreach; no message has been sent.
+
 Aim for three independent owners using the [business pilot kit](business-pilot-kit.md), with private consent records, follow-up observations, commercial interviews, and an approved case study. This is a practical target, not an official requirement.
 
 Each owner should operate a real small business with recurring policy questions and agree to evaluate OrderProof. Record the business type, consent date, pilot dates, and operator privately. Agree what may be published; do not publish names, quotes, customer content, or identifying details without permission. No invitations have been sent by the coding agent.

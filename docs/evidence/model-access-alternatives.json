@@ -1,0 +1,11 @@
+{
+  "checkedOnLocalDate": "2026-09-22",
+  "timezone": "Asia/Colombo",
+  "checks": [
+    {"model": "amazon.nova-lite-v1:0", "region": "us-west-2", "quotaCode": "L-45E0AD92", "dailyQuota": 0},
+    {"model": "ai21.jamba-1-5-mini-v1:0", "region": "us-east-1", "tokensPerMinute": 3000, "lifecycle": "LEGACY", "probeMaxTokens": 8, "result": "ThrottlingException", "message": "Too many tokens per day, please wait before trying again."},
+    {"service": "AWS Support API", "operation": "DescribeCases", "displayId": "178991456400579", "result": "SubscriptionRequiredException"}
+  ],
+  "conclusion": "The tested alternate model also fails the daily allowance check. A positive per-minute quota does not establish usable inference access. No model switch or support-plan purchase was made. No support message was sent.",
+  "remainingAction": "Reply in the existing AWS Support console case asking AWS to restore a usable daily inference allowance or identify the required account verification."
+}

@@ -9,3 +9,9 @@ Quota request 2e82f2db197b4488873af1601d68754avdyN5ysA remains CASE_OPENED. We r
 Our Zero to Shipped submission deadline is October 2, 2026. Could you provide an update and the next action needed to enable model evaluation?
 
 No reserved capacity or paid support-plan purchase is requested.
+
+Additional checks on September 22, 2026 (Asia/Colombo):
+- Nova Lite daily quota L-45E0AD92 is still 0 in us-west-2.
+- In us-east-1, Jamba 1.5 Mini has a 3,000-token per-minute quota, but even an 8-output-token Converse probe fails with the same daily-token error.
+- This suggests the daily allowance needs investigation, not just the per-minute quota requested in this case.
+Please identify the exact applied daily quota/account restriction and the action needed to restore a modest allowance. The application cannot complete live AI evaluation until a request succeeds.
