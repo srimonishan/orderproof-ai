@@ -1,0 +1,11 @@
+Follow-up for existing case 178991456400579
+
+Please review the zero applied Bedrock token quota preventing our small AWS-hosted OrderProof application from making even a single realistic Nova inference request in us-west-2.
+
+The account is ACTIVE on the PAID plan. Nova Lite daily allowance is 0; requests return ThrottlingException: Too many tokens per day. Nova Micro previously failed with the same restriction. We need a usable baseline allowance for Nova Lite or the cheaper text-only Nova Micro, not provisioned throughput.
+
+Quota request 2e82f2db197b4488873af1601d68754avdyN5ysA remains CASE_OPENED. We requested 8,000,001 TPM only because the API rejected small requests below its 8,000,000 default despite the applied quota being zero. Actual app usage remains capped at 500 AI attempts/month, with 550 output tokens per support reply and additional per-tenant limits. Please grant a suitable modest allowance or identify any required account verification step.
+
+Our Zero to Shipped submission deadline is October 2, 2026. Could you provide an update and the next action needed to enable model evaluation?
+
+No reserved capacity or paid support-plan purchase is requested.

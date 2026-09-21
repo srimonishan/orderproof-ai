@@ -321,7 +321,31 @@ def messages(cid):
 
 
 def view(c):
-    return {**clean(c), 'messages': messages(c['id'])}
+    return {**clean(c), 'messages': messages(c['id']), 'feedback': clean(get('CHAT#' + c['id'], 'FEEDBACK') or {}) or None}
+
+
+def save_feedback(c, data):
+    """Optional customer feedback is separate from the sealed conversation."""
+    if c['status'] != 'closed':
+        raise a.Problem(409, 'Feedback is available after the conversation closes.')
+    resolution, rating = data.get('resolution'), data.get('rating')
+    if resolution not in ('yes', 'partly', 'no') or type(rating) is not int or not 1 <= rating <= 5:
+        raise a.Problem(400, 'Choose a resolution and a helpfulness rating from 1 to 5.')
+    comment = data.get('comment', '')
+    if not isinstance(comment, str) or len(comment) > 1000:
+        raise a.Problem(400, 'Comments must be text of at most 1,000 characters.')
+    values = {'resolution': resolution, 'rating': rating, 'comment': comment.strip()}
+    item = {**key('CHAT#' + c['id'], 'FEEDBACK'), **values,
+            'submittedAt': a.now(), 'expires': c['expires']}
+    table = store()
+    try:
+        table.put_item(Item=item, ConditionExpression=Attr('pk').not_exists())
+    except table.meta.client.exceptions.ConditionalCheckFailedException:
+        previous = get('CHAT#' + c['id'], 'FEEDBACK')
+        if any(previous.get(k) != v for k, v in values.items()):
+            raise a.Problem(409, 'Feedback has already been submitted and cannot be replaced.')
+        item = previous
+    return clean(item)
 
 
 def event_digest(event):
@@ -591,7 +615,7 @@ def route(event):
             if method == 'POST' and match[2]:
                 ip = event.get('requestContext', {}).get('http', {}).get('sourceIp', 'unknown')
                 return a.response(start_chat(match[1], a.body_of(event), ip), 201)
-        match = re.fullmatch(r'conversations/([a-f0-9]{24})(?:/(messages|handoff|export|verify))?', leaf)
+        match = re.fullmatch(r'conversations/([a-f0-9]{24})(?:/(messages|handoff|export|verify|feedback))?', leaf)
         if match:
             c = authorized_conversation(match[1], token=headers.get('x-conversation-token')); action = match[2]
             if method == 'GET':
@@ -599,7 +623,9 @@ def route(event):
                 if action == 'verify': return a.response(verify_archive(c))
                 if not action: return a.response(view(c))
             if method == 'POST':
-                data = a.body_of(event); rid = client_request_id(data, action)
+                data = a.body_of(event)
+                if action == 'feedback': return a.response(save_feedback(c, data))
+                rid = client_request_id(data, action)
                 if action == 'handoff':
                     ensure_active(business(c['owner']))
                     if c['mode'] == 'ai':

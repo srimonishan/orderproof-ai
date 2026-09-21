@@ -180,3 +180,30 @@ def test_saved_citation_survives_policy_removal_and_verifies_offline(monkeypatch
     assert '30 days' in export['messages'][-1]['sources'][0]['excerpt']
     assert s.retrieve('alice','returns policy')==[]
     assert offline.verify(export,export['lastDigest'])['chainConsistent']
+
+
+def test_feedback_is_optional_isolated_and_does_not_change_archive():
+    c, token = chat()
+    private = '/api/support/conversations/' + c['id']
+    public = '/public/support/conversations/' + c['id']
+    payload = {'resolution': 'partly', 'rating': 3, 'comment': 'Clear record; needed a person.'}
+    assert call(public+'/feedback', 'POST', payload, owner=None, token=token)[0] == 409
+    assert call(private+'/close', 'POST', {'requestId': 'feedback-close'})[0] == 200
+    before = call(private+'/export')[1]
+    assert call(public+'/feedback', 'POST', payload, owner=None, token='wrong')[0] == 404
+    first = call(public+'/feedback', 'POST', payload, owner=None, token=token)
+    assert first[0] == 200
+    assert call(public+'/feedback', 'POST', payload, owner=None, token=token) == first
+    assert call(public+'/feedback', 'POST', {**payload, 'rating': 5}, owner=None, token=token)[0] == 409
+    assert call(private, owner='mallory')[0] == 404
+    assert call(private)[1]['feedback']['rating'] == 3
+    assert call(public, owner=None, token=token)[1]['feedback']['resolution'] == 'partly'
+    assert call(private+'/export')[1] == before
+    assert call(private+'/verify')[1]['archiveValid'] is True
+
+
+@pytest.mark.parametrize('change', [{'rating': True}, {'rating': 0}, {'rating': 6}, {'rating': '5'}, {'resolution': 'maybe'}, {'comment': ['bad']}, {'comment': 'x'*1001}])
+def test_feedback_rejects_invalid_values(change):
+    c, token = chat()
+    assert call('/api/support/conversations/'+c['id']+'/close', 'POST', {'requestId':'close'})[0] == 200
+    assert call('/public/support/conversations/'+c['id']+'/feedback', 'POST', {'resolution':'yes','rating':5, **change}, owner=None, token=token)[0] == 400
