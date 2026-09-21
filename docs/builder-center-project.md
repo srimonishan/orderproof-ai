@@ -40,7 +40,7 @@ Stripe is intentionally deferred; selecting a proposed plan does not charge or a
 
 The initial audience is small online businesses with recurring shipping and return-policy questions and a single support owner. The product hypothesis is that keeping answers, handoffs, and records together reduces repeated explanations and makes follow-up easier. The seven-day trial and proposed subscription tiers provide an initial commercial model, not evidence of revenue or product-market fit.
 
-Next validation: observe real businesses handling policy questions, measure how often answers require correction, time a handoff, and check whether both sides can locate and export the record. No customer adoption, revenue, or time-saving measurements are claimed yet.
+Next validation: observe real businesses handling policy questions, measure how often answers require correction, time a handoff, and check whether both sides can locate and export the record. No customer adoption, revenue, or time-saving measurements are claimed yet. A consent-based pilot protocol, blank observation sheet, and report generator are prepared in `docs/pilot/`; actual participation and results remain pending.
 
 ## Short demonstration
 

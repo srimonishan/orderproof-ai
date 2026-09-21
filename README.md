@@ -135,6 +135,7 @@ template.yaml            AWS SAM infrastructure
 ## Documentation
 
 - [Final audit and production release gates](docs/final-audit.md)
+- [Real-business pilot and measurement guide](docs/pilot/README.md)
 - [Product scope](docs/product-v2.md)
 - [Integration and API guide](docs/integrations.md)
 - [Billing, limits, and operations](docs/billing-and-operations.md)
