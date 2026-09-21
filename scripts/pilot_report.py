@@ -41,8 +41,11 @@ def summarize(rows):
         measured=[r for r in items if r[field]!='na']
         return {'successful':sum(r[field]=='yes' for r in measured),'observed':len(measured)}
     result={'status':'observations_recorded_not_independent_validation','limitations':['Owner-entered observations; consent and live provenance are declarations, not independently verified.','Small convenience samples do not establish causation, demand, revenue, or product-market fit.','Baseline and product phases may differ in task difficulty; no savings percentage is inferred.'],'businesses':len({r['business_id'] for rows in groups.values() for r in rows}),'phases':{}}
-    for phase,items in groups.items():
-        result['phases'][phase]={'observations':len(items),'medianHandlingSeconds':median([r['seconds'] for r in items]),'resolved':ratio(items,'resolved'),'answerOrigins':{o:sum(r['answer_origin']==o for r in items) for o in ('human','bedrock','fallback')},'citations':ratio(items,'citation_correct'),'exports':ratio(items,'export_success'),'medianHandoffSeconds':median([r['handoff'] for r in items if r['handoff'] is not None]),'medianOwnerRating':median([r['rating'] for r in items if r['rating'] is not None])}
+    def phase_summary(items):
+        return {'observations':len(items),'medianHandlingSeconds':median([r['seconds'] for r in items]),'resolved':ratio(items,'resolved'),'answerOrigins':{o:sum(r['answer_origin']==o for r in items) for o in ('human','bedrock','fallback')},'citations':ratio(items,'citation_correct'),'exports':ratio(items,'export_success'),'handoffMeasurements':sum(r['handoff'] is not None for r in items),'ownerRatingMeasurements':sum(r['rating'] is not None for r in items),'medianHandoffSeconds':median([r['handoff'] for r in items if r['handoff'] is not None]),'medianOwnerRating':median([r['rating'] for r in items if r['rating'] is not None])}
+    result['phases']={phase:phase_summary(items) for phase,items in groups.items()}
+    business_ids=sorted({r['business_id'] for items in groups.values() for r in items})
+    result['perBusiness']={business_id:{phase:phase_summary([r for r in items if r['business_id']==business_id]) for phase,items in groups.items()} for business_id in business_ids}
     return result
 
 

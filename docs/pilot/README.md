@@ -44,7 +44,7 @@ cp docs/pilot/observations-template.csv pilot-data/observations.csv
 python scripts/pilot_report.py pilot-data/observations.csv --output pilot-data/report.json
 ```
 
-An empty sheet fails rather than generating invented results. The report includes denominators, separates answer origins, and reports missing measurements as null. It does not infer a savings percentage or causation from unmatched task samples.
+An empty sheet fails rather than generating invented results. The report includes denominators, separates answer origins, and reports missing measurements as null. It includes both pooled and per-business phase results, plus explicit counts of handoff durations and owner ratings. A missing measurement is not counted as zero; a business without baseline observations has an empty baseline summary. It does not infer a savings percentage or causation from unmatched task samples.
 
 ## 5. Ask for actual business feedback
 

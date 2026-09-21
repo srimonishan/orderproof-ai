@@ -87,3 +87,9 @@ Validation: 75 backend tests passed; JavaScript syntax, CloudFormation lint and 
 The deployed synthetic integration test verified feedback persistence, unchanged exported transcript and protected archive, tenant isolation, human handoff, and export. See `docs/evidence/live-support-smoke.json` (2026-09-21T18:14:23Z). The live AI attempt still returned unavailable fallback: this is not successful generated-answer evaluation.
 
 The independent-business kit includes consent, comparable baselines, correction/retrieval observations, return usage, commercial interviews, and an owner-approved case-study template. No independent participant or impact results have been invented. Production approval remains outstanding while live AI evaluation and genuine pilot evidence are missing; submission and eligibility confirmations remain separate checklist items.
+
+## Evidence-quality follow-up — September 22, 2026 (Sri Lanka)
+
+Fixed business inbox polling to refresh newly submitted customer feedback even when message sequence and archive metadata do not change. The pilot reporting script now produces per-business phase breakdowns and explicit handoff/rating measurement counts; missing measurements remain missing. No participant results were created.
+
+Validation: 76 backend tests, JavaScript syntax checks, and support browser/accessibility checks passed. Fresh Bedrock evaluation at 2026-09-21T19:25:10Z stopped on ThrottlingException (“Too many tokens per day”): 0 of 5 cases completed. The existing quota request remains CASE_OPENED, case 178991456400579. Successful live AI quality and independent business outcomes remain outstanding; no revised prize score is claimed.

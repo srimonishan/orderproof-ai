@@ -23,3 +23,19 @@ def test_invalid_or_synthetic_evidence_rejected(changes):
 
 def test_duplicates_rejected():
     with pytest.raises(ValueError,match='Duplicate'):p.summarize([row(),row()])
+
+
+def test_business_breakdown_and_missing_measurement_denominators():
+    report=p.summarize([row(business_id='B1',handling_seconds='10',handoff_seconds='',owner_rating=''),row(business_id='B2',handling_seconds='90',handoff_seconds='0',owner_rating='1')])
+    assert report['businesses']==2
+    assert report['phases']['orderproof']['medianHandlingSeconds']==50
+    assert report['phases']['orderproof']['handoffMeasurements']==1
+    assert report['phases']['orderproof']['ownerRatingMeasurements']==1
+    first=report['perBusiness']['B1']['orderproof']
+    assert first['medianHandlingSeconds']==10
+    assert first['medianHandoffSeconds'] is None
+    assert first['ownerRatingMeasurements']==0
+    second=report['perBusiness']['B2']['orderproof']
+    assert second['medianHandlingSeconds']==90
+    assert second['medianHandoffSeconds']==0
+    assert report['perBusiness']['B2']['baseline']['observations']==0
