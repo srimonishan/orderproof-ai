@@ -348,6 +348,25 @@ def save_feedback(c, data):
     return clean(item)
 
 
+def pilot_outcomes(owner):
+    business(owner)
+    rows = sorted([c for c in query(SUPPORT_TABLE, 'BIZ#' + owner, 'CONV#')
+                   if c['expires'] > time.time()], key=lambda c: c['updatedAt'], reverse=True)
+    sample = rows[:100]
+    closed = [c for c in sample if c['status'] == 'closed']
+    feedback = [get('CHAT#' + c['id'], 'FEEDBACK') for c in closed]
+    feedback = [f for f in feedback if f and f['expires'] > time.time()]
+    return {'generatedAt': a.now(), 'scope': 'Most recently updated 100 unexpired conversations; includes test activity.',
+            'availableConversations': len(rows), 'sampledConversations': len(sample), 'truncated': len(rows) > 100,
+            'closedConversations': len(closed), 'feedbackResponses': len(feedback),
+            'responseRatePercent': round(100 * len(feedback) / len(closed), 1) if closed else None,
+            'resolution': {value: sum(f['resolution'] == value for f in feedback) for value in ('yes', 'partly', 'no')},
+            'helpfulness': {str(value): sum(f['rating'] == value for f in feedback) for value in range(1, 6)},
+            'limitations': ['Self-reported feedback is not verified resolution or AI accuracy.',
+                            'Missing feedback does not indicate satisfaction.',
+                            'Counts include assistant-run tests and do not establish independent adoption, revenue, or time savings.']}
+
+
 def event_digest(event):
     value = {k: v for k, v in event.items() if k not in ('pk', 'sk', 'digest', 'expires')}
     return hashlib.sha256(canon(value).encode()).hexdigest()
@@ -561,6 +580,8 @@ def route(event):
         if leaf == 'conversations' and method == 'GET':
             business(owner)
             return a.response(sorted([clean(c) for c in query(SUPPORT_TABLE, 'BIZ#' + owner, 'CONV#') if c['expires'] > time.time()], key=lambda c: c['updatedAt'], reverse=True))
+        if leaf == 'outcomes' and method == 'GET':
+            return a.response(pilot_outcomes(owner))
         if leaf == 'plans' and method == 'GET':
             return a.response({'plans': PLANS, 'billingEnabled': False})
         if leaf == 'select-plan' and method == 'POST':

@@ -207,3 +207,21 @@ def test_feedback_rejects_invalid_values(change):
     c, token = chat()
     assert call('/api/support/conversations/'+c['id']+'/close', 'POST', {'requestId':'close'})[0] == 200
     assert call('/public/support/conversations/'+c['id']+'/feedback', 'POST', {'resolution':'yes','rating':5, **change}, owner=None, token=token)[0] == 400
+
+
+def test_pilot_outcomes_counts_feedback_and_isolates_businesses():
+    c,t=chat();biz('bob')
+    assert call('/api/support/outcomes',owner=None)[0]==401
+    empty=call('/api/support/outcomes',owner='bob')[1]
+    assert empty['sampledConversations']==0 and empty['responseRatePercent'] is None
+    assert call('/api/support/conversations/'+c['id']+'/close','POST',{'requestId':'close'})[0]==200
+    before=call('/api/support/outcomes')[1]
+    assert before['closedConversations']==1 and before['feedbackResponses']==0
+    assert before['responseRatePercent']==0
+    call('/public/support/conversations/'+c['id']+'/feedback','POST',{'resolution':'partly','rating':2,'comment':'Private comment'},owner=None,token=t)
+    report=call('/api/support/outcomes')[1]
+    assert report['feedbackResponses']==1 and report['responseRatePercent']==100
+    assert report['resolution']=={'yes':0,'partly':1,'no':0}
+    assert report['helpfulness']['2']==1
+    assert 'Private comment' not in json.dumps(report)
+    assert call('/api/support/outcomes',owner='bob')[1]['feedbackResponses']==0

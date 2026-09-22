@@ -93,3 +93,9 @@ The independent-business kit includes consent, comparable baselines, correction/
 Fixed business inbox polling to refresh newly submitted customer feedback even when message sequence and archive metadata do not change. The pilot reporting script now produces per-business phase breakdowns and explicit handoff/rating measurement counts; missing measurements remain missing. No participant results were created.
 
 Validation: 76 backend tests, JavaScript syntax checks, and support browser/accessibility checks passed. Fresh Bedrock evaluation at 2026-09-21T19:25:10Z stopped on ThrottlingException (“Too many tokens per day”): 0 of 5 cases completed. The existing quota request remains CASE_OPENED, case 178991456400579. Successful live AI quality and independent business outcomes remain outstanding; no revised prize score is claimed.
+
+## Pilot outcomes release — September 22, 2026
+
+Added an authenticated, tenant-isolated outcomes report and a panel under Conversation records. It reports the 100 most recently updated unexpired conversations, closed-chat feedback coverage, self-reported resolution counts, and helpfulness distributions. The downloadable JSON omits names, comments, and messages. Counts explicitly include test activity and are not independent adoption, revenue, or causal impact evidence.
+
+Validation: 83 backend tests passed, including cross-tenant isolation, empty denominators, feedback counts, and comment exclusion. JavaScript and support browser/accessibility checks passed. AWS deployment reached UPDATE_COMPLETE. A live authenticated browser check in the synthetic Achievers workspace verified one synthetic response, its Partly/3 rating, report download, and accessibility. Private test artifacts remain in ignored pilot-data. Bedrock readiness and independent pilot results remain outstanding.

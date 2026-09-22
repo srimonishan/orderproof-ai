@@ -77,3 +77,7 @@ A genuine pilot report is one piece of evidence. It does not by itself establish
 ## Optional customer feedback
 
 After closure, the live widget offers resolution (Yes / Partly / No), helpfulness (1–5), and an optional comment. Submitting is optional; downloading the record and starting another conversation remain available. The business can read feedback in the conversation details. Feedback is stored separately with the conversation access expiry, cannot be replaced through the API, and does not modify the sealed transcript. Ratings are self-reported and do not prove accuracy or independent business adoption.
+
+## Workspace outcomes report
+
+Open **Conversation records → Pilot outcomes** to see feedback coverage, reported resolution (Yes / Partly / No), and the full helpfulness-rating distribution. Download the JSON report for a dated snapshot without names, comments, or message content. The report covers the 100 most recently updated unexpired conversations and labels truncation; closed conversations in that sample form the response-rate denominator. No responses means no satisfaction measurement. Counts include test activity and are not evidence of independent adoption, revenue, AI accuracy, or time savings. Use the private pilot sheets to establish provenance and comparable baseline measurements.
