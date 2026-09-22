@@ -1,1 +1,1 @@
-business_id,task_id,phase,environment,owner_consent,answer_origin,handling_seconds,resolved,citation_correct,handoff_seconds,export_success,owner_rating
+business_id,task_id,phase,environment,owner_consent,answer_origin,handling_seconds,resolved,citation_correct,handoff_seconds,export_success,owner_rating,retrieval_success,retrieval_seconds,repeated_questions

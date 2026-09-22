@@ -34,7 +34,14 @@ def summarize(rows):
         if handoff is not None and (not math.isfinite(handoff) or handoff<0):raise ValueError('Invalid handoff duration.')
         rating=int(row['owner_rating']) if row.get('owner_rating') else None
         if rating is not None and not 1<=rating<=5:raise ValueError('Owner rating must be from 1 to 5.')
-        groups[phase].append({**row,'seconds':seconds,'handoff':handoff,'rating':rating})
+        retrieval=row.get('retrieval_success') or 'na'
+        if retrieval not in ('yes','no','na'):raise ValueError('Retrieval success must be yes, no, or na.')
+        retrieval_seconds=float(row['retrieval_seconds']) if row.get('retrieval_seconds') else None
+        if retrieval_seconds is not None and (not math.isfinite(retrieval_seconds) or retrieval_seconds<0 or retrieval=='na'):
+            raise ValueError('Retrieval duration requires an attempted retrieval and a finite nonnegative time.')
+        repeated=int(row['repeated_questions']) if row.get('repeated_questions') else None
+        if repeated is not None and repeated<0:raise ValueError('Repeated questions cannot be negative.')
+        groups[phase].append({**row,'seconds':seconds,'handoff':handoff,'rating':rating,'retrieval_success':retrieval,'retrievalSeconds':retrieval_seconds,'repeatedQuestions':repeated})
     if not seen:raise ValueError('No real observations supplied. Market impact is not yet measured.')
     def median(values):return round(statistics.median(values),2) if values else None
     def ratio(items,field):
@@ -42,7 +49,7 @@ def summarize(rows):
         return {'successful':sum(r[field]=='yes' for r in measured),'observed':len(measured)}
     result={'status':'observations_recorded_not_independent_validation','limitations':['Owner-entered observations; consent and live provenance are declarations, not independently verified.','Small convenience samples do not establish causation, demand, revenue, or product-market fit.','Baseline and product phases may differ in task difficulty; no savings percentage is inferred.'],'businesses':len({r['business_id'] for rows in groups.values() for r in rows}),'phases':{}}
     def phase_summary(items):
-        return {'observations':len(items),'medianHandlingSeconds':median([r['seconds'] for r in items]),'resolved':ratio(items,'resolved'),'answerOrigins':{o:sum(r['answer_origin']==o for r in items) for o in ('human','bedrock','fallback')},'citations':ratio(items,'citation_correct'),'exports':ratio(items,'export_success'),'handoffMeasurements':sum(r['handoff'] is not None for r in items),'ownerRatingMeasurements':sum(r['rating'] is not None for r in items),'medianHandoffSeconds':median([r['handoff'] for r in items if r['handoff'] is not None]),'medianOwnerRating':median([r['rating'] for r in items if r['rating'] is not None])}
+        return {'observations':len(items),'retrievals':ratio(items,'retrieval_success'),'retrievalTimeMeasurements':sum(r['retrievalSeconds'] is not None for r in items),'medianRetrievalSeconds':median([r['retrievalSeconds'] for r in items if r['retrievalSeconds'] is not None]),'repeatedQuestionMeasurements':sum(r['repeatedQuestions'] is not None for r in items),'medianRepeatedQuestions':median([r['repeatedQuestions'] for r in items if r['repeatedQuestions'] is not None]),'medianHandlingSeconds':median([r['seconds'] for r in items]),'resolved':ratio(items,'resolved'),'answerOrigins':{o:sum(r['answer_origin']==o for r in items) for o in ('human','bedrock','fallback')},'citations':ratio(items,'citation_correct'),'exports':ratio(items,'export_success'),'handoffMeasurements':sum(r['handoff'] is not None for r in items),'ownerRatingMeasurements':sum(r['rating'] is not None for r in items),'medianHandoffSeconds':median([r['handoff'] for r in items if r['handoff'] is not None]),'medianOwnerRating':median([r['rating'] for r in items if r['rating'] is not None])}
     result['phases']={phase:phase_summary(items) for phase,items in groups.items()}
     business_ids=sorted({r['business_id'] for items in groups.values() for r in items})
     result['perBusiness']={business_id:{phase:phase_summary([r for r in items if r['business_id']==business_id]) for phase,items in groups.items()} for business_id in business_ids}

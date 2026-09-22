@@ -39,3 +39,16 @@ def test_business_breakdown_and_missing_measurement_denominators():
     assert second['medianHandlingSeconds']==90
     assert second['medianHandoffSeconds']==0
     assert report['perBusiness']['B2']['baseline']['observations']==0
+
+
+def test_retrieval_failures_and_zero_repeated_questions_are_counted():
+    result=p.summarize([row(retrieval_success='no',retrieval_seconds='120',repeated_questions='2'),row(task_id='T2',retrieval_success='yes',retrieval_seconds='20',repeated_questions='0'),row(task_id='T3')])['phases']['orderproof']
+    assert result['retrievals']=={'successful':1,'observed':2}
+    assert result['medianRetrievalSeconds']==70
+    assert result['retrievalTimeMeasurements']==2
+    assert result['medianRepeatedQuestions']==1
+    assert result['repeatedQuestionMeasurements']==2
+
+@pytest.mark.parametrize('changes',[{'retrieval_success':'maybe'},{'retrieval_success':'yes','retrieval_seconds':'nan'},{'retrieval_seconds':'10'},{'repeated_questions':'-1'},{'repeated_questions':'1.5'}])
+def test_invalid_extended_observations_rejected(changes):
+    with pytest.raises(ValueError):p.summarize([row(**changes)])

@@ -2,6 +2,8 @@
 
 Status: **prepared, not started**. The founder named OrderProof as the participant; see [internal usability pilot](orderproof-internal-pilot.md). This is not an independent business pilot. No business participation, customer demand, measured savings, or successful live AI outcomes are claimed.
 
+Start with the [step-by-step pilot runbook](runbook.md), which links consent records, measurement sheets, follow-up, and publication approval.
+
 ## 1. Recruit consenting independent businesses
 
 Use the [owner invitation and 20-minute session](owner-invitation.md) to start with one consenting owner. This is a draft for personal outreach; no message has been sent.
