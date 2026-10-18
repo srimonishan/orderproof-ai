@@ -11,7 +11,7 @@
     "test:auth-email": "node tests/auth-email-browser.cjs"
   },
   "devDependencies": {
-    "@axe-core/playwright": "4.13.0",
+    "@axe-core/playwright": "4.14.0",
     "playwright": "1.63.0"
   }
 }
